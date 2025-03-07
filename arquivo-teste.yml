@@ -1,0 +1,30 @@
+---
+- name: Criar arquivo com data, hostname e IP público
+  hosts: all
+  become: no  # Não precisa de privilégios de root para criar o arquivo no diretório home do usuário
+  tasks:
+    - name: Obter a data atual
+      ansible.builtin.command: date +%Y-%m-%d
+      register: current_date
+      changed_when: false
+
+    - name: Obter o hostname da máquina
+      ansible.builtin.command: hostname
+      register: hostname_output
+      changed_when: false
+
+    - name: Obter o IP público da máquina
+      ansible.builtin.uri:
+        url: https://api.ipify.org
+        return_content: yes
+      register: public_ip
+      changed_when: false
+
+    - name: Criar o arquivo arquivo-teste com as informações
+      ansible.builtin.copy:
+        content: |
+          Data: {{ current_date.stdout }}
+          Hostname: {{ hostname_output.stdout }}
+          IP Público: {{ public_ip.content }}
+        dest: ~/arquivo-teste
+        mode: '0644'
