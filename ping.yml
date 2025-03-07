@@ -1,0 +1,6 @@
+---
+- name: Teste de Conexão
+  hosts: all
+  tasks:
+    - name: Ping no servidor
+      ansible.builtin.ping:
