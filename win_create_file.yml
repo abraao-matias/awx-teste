@@ -1,0 +1,33 @@
+---
+- name: Criar arquivo com data, hostname e IP público no Windows
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Obter a data atual
+      ansible.windows.win_command: powershell -Command "Get-Date -Format 'yyyy-MM-dd'"
+      register: current_date
+
+    - name: Obter o hostname da máquina
+      ansible.windows.win_command: hostname
+      register: hostname_output
+
+    - name: Obter o IP público da máquina
+      ansible.windows.win_uri:
+        url: https://api.ipify.org
+        return_content: yes
+      register: public_ip
+
+    - name: Criar o arquivo arquivo-teste.txt com as informações
+      ansible.windows.win_file:
+        path: C:\Users\tsuna\arquivo-teste.txt
+        state: file
+
+    - name: Escrever no arquivo
+      ansible.windows.win_lineinfile:
+        path: C:\Users\tsuna\arquivo-teste.txt
+        line: "{{ item }}"
+        state: present
+      loop:
+        - "Data: {{ current_date.stdout }}"
+        - "Hostname: {{ hostname_output.stdout }}"
+        - "IP Público: {{ public_ip.content }}"
