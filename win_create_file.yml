@@ -21,13 +21,7 @@
       ansible.windows.win_file:
         path: C:\Users\tsuna\arquivo-teste.txt
         state: file
-
-    - name: Escrever no arquivo
-      ansible.windows.win_lineinfile:
-        path: C:\Users\tsuna\arquivo-teste.txt
-        line: "{{ item }}"
-        state: present
-      loop:
-        - "Data: {{ current_date.stdout }}"
-        - "Hostname: {{ hostname_output.stdout }}"
-        - "IP Público: {{ public_ip.content }}"
+        content: |
+          Data: {{ current_date.stdout }}
+          Hostname: {{ hostname_output.stdout }}
+          IP Público: {{ public_ip.content }}
