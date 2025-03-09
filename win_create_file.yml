@@ -18,10 +18,9 @@
       register: public_ip
 
     - name: Criar o arquivo arquivo-teste.txt com as informações
-      ansible.windows.win_file:
-        path: C:\Users\tsuna\arquivo-teste.txt
-        state: file
+      ansible.windows.win_copy:
         content: |
           Data: {{ current_date.stdout }}
           Hostname: {{ hostname_output.stdout }}
           IP Público: {{ public_ip.content }}
+        dest: C:\Users\tsuna\arquivo-teste.txt
