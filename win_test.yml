@@ -1,0 +1,11 @@
+---
+- name: Teste de Conexão com Windows
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Executar comando whoami no Windows
+      ansible.windows.win_command: whoami
+      register: whoami_output
+    - name: Mostrar resultado
+      ansible.builtin.debug:
+        msg: "Usuário atual: {{ whoami_output.stdout }}"
