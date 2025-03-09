@@ -23,4 +23,4 @@
           Data: {{ current_date.stdout }}
           Hostname: {{ hostname_output.stdout }}
           IP Público: {{ public_ip.content }}
-        dest: C:\Users\tsuna\arquivo-teste.txt
+        dest: C:\Users\tsuna\Desktop\arquivo-teste.txt
