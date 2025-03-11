@@ -3,6 +3,16 @@
   hosts: all
   gather_facts: no
   tasks:
+    - name: Testar conexão WinRM
+      ansible.windows.win_command: whoami
+      register: winrm_test
+      failed_when: false
+
+    - name: Exibir resultado do teste
+      ansible.builtin.debug:
+        msg: "Teste WinRM: {{ winrm_test.stdout }}"
+      when: winrm_test.rc == 0
+
     - name: Obter a data atual
       ansible.windows.win_command: powershell -Command "Get-Date -Format 'yyyy-MM-dd'"
       register: current_date
