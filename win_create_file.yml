@@ -1,5 +1,5 @@
 ---
-- name: Criar arquivo com data, hostname e IP público no Windows
+- name: Criar arquivo com data, hora, hostname e IP público no Windows
   hosts: all
   gather_facts: no
   tasks:
@@ -17,6 +17,10 @@
       ansible.windows.win_command: powershell -Command "Get-Date -Format 'yyyy-MM-dd'"
       register: current_date
 
+    - name: Obter a hora atual
+      ansible.windows.win_command: powershell -Command "Get-Date -Format 'HH:mm:ss'"
+      register: current_time
+
     - name: Obter o hostname da máquina
       ansible.windows.win_command: hostname
       register: hostname_output
@@ -31,6 +35,7 @@
       ansible.windows.win_copy:
         content: |
           Data: {{ current_date.stdout }}
+          Hora: {{ current_time.stdout }}
           Hostname: {{ hostname_output.stdout }}
           IP Público: {{ public_ip.content }}
         dest: C:\Users\tsuna\Desktop\arquivo-teste.txt
