@@ -1,6 +1,6 @@
 ---
 - name: Criar snapshot da VM windows10 no Hyper-V
-  hosts: windows
+  hosts: hyperv_host
   tasks:
     - name: Criar checkpoint da VM windows10
       ansible.windows.win_hyperv_checkpoint:
