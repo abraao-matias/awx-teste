@@ -1,0 +1,17 @@
+---
+- name: Criar snapshot da VM windows10 no Hyper-V
+  hosts: windows
+  tasks:
+    - name: Criar checkpoint da VM windows10
+      ansible.windows.win_hyperv_checkpoint:
+        name: windows10
+        state: present
+        snapshot_name: "Snapshot-{{ ansible_date_time.iso8601 }}"
+        server: localhost
+        username: "{{ ansible_user }}"
+        password: "{{ ansible_password }}"
+      register: checkpoint_result
+
+    - name: Exibir resultado do snapshot
+      ansible.builtin.debug:
+        msg: "Snapshot criado: {{ checkpoint_result.checkpoint_name }}"
