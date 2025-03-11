@@ -20,6 +20,12 @@
     - name: Obter a hora atual
       ansible.windows.win_command: powershell -Command "Get-Date -Format 'HH:mm:ss'"
       register: current_time
+      failed_when: false  # Evitar falha se o comando falhar
+
+    - name: Exibir resultado da hora
+      ansible.builtin.debug:
+        msg: "Hora obtida: {{ current_time.stdout }}"
+      when: current_time.rc == 0
 
     - name: Obter o hostname da máquina
       ansible.windows.win_command: hostname
@@ -35,7 +41,7 @@
       ansible.windows.win_copy:
         content: |
           Data: {{ current_date.stdout }}
-          Hora: {{ current_time.stdout }}
+          Hora: {{ current_time.stdout | default('Não disponível') }}
           Hostname: {{ hostname_output.stdout }}
           IP Público: {{ public_ip.content }}
         dest: C:\Users\tsuna\Desktop\arquivo-teste.txt
