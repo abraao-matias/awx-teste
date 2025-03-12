@@ -15,7 +15,6 @@
             exit 1
           }
       register: checkpoint_result
-      failed_when: checkpoint_result.rc != 0
 
     - name: Exibir resultado do snapshot
       ansible.builtin.debug:
