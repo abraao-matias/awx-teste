@@ -1,0 +1,21 @@
+---
+- name: Criar snapshot da VM ubuntu100 no Hyper-V
+  hosts: hyperv_host
+  tasks:
+    - name: Criar checkpoint da VM ubuntu100
+      ansible.windows.win_powershell:
+        script: |
+          try {
+            $vmName = "ubuntu100"
+            $snapshotName = "Snapshot-$(Get-Date -Format 'yyyy-MM-dd-HH-mm-ss')"
+            Checkpoint-VM -Name $vmName -SnapshotName $snapshotName -ErrorAction Stop
+            Write-Output "Snapshot criado: $snapshotName"
+          } catch {
+            Write-Error "Erro ao criar snapshot: $_"
+            exit 1
+          }
+      register: checkpoint_result
+
+    - name: Exibir resultado do snapshot
+      ansible.builtin.debug:
+        msg: "{{ checkpoint_result.output }}"
