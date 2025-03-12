@@ -5,10 +5,9 @@
     - name: Criar checkpoint da VM windows10
       ansible.windows.win_powershell:
         script: |
-          script: |
-          $vmName = "windows10"
-          $snapshotName = "Snapshot-$(Get-Date -Format 'yyyy-MM-dd-HH-mm-ss')"
           try {
+            $vmName = "windows10"
+            $snapshotName = "Snapshot-$(Get-Date -Format 'yyyy-MM-dd-HH-mm-ss')"
             Checkpoint-VM -Name $vmName -SnapshotName $snapshotName -ErrorAction Stop
             Write-Output "Snapshot criado: $snapshotName"
           } catch {
@@ -16,6 +15,7 @@
             exit 1
           }
       register: checkpoint_result
+      failed_when: checkpoint_result.rc != 0
 
     - name: Exibir resultado do snapshot
       ansible.builtin.debug:
